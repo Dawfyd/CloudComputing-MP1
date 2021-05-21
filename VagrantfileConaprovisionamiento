@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+ config.vm.box = "bento/ubuntu-20.04"
+
+ # Configs for web server 1
+ config.vm.define :servidorVM2 do |servidorVM2|
+   servidorVM2.vm.provider :virtualbox do |vb_config|
+            vb_config.name = "Web Server 1"
+   end
+   servidorVM2.vm.network "public_network" , ip:"192.168.0.3" 
+   servidorVM2.vm.provision "shell", path: "bootstrapVM2.sh"
+   servidorVM2.vm.hostname = "servidorVM2"
+ end
+
+ # Configs for web server 2
+ config.vm.define :servidorVM3 do |servidorVM3|
+   servidorVM3.vm.provider :virtualbox do |vb_config|
+            vb_config.name = "Web Server 2"
+   end
+   servidorVM3.vm.network "public_network" , ip:"192.168.0.4" 
+   servidorVM3.vm.provision "shell", path: "bootstrapVM3.sh"
+   servidorVM3.vm.hostname = "servidorVM3"
+ end
+
+ # Configs for haproxy
+ config.vm.define :clienteVM1 do |clienteVM1|
+   clienteVM1.vm.provider :virtualbox do |vb_config|
+            vb_config.name = "HAProxy"
+   end
+   clienteVM1.vm.network "public_network" , ip:"192.168.0.31" 
+   clienteVM1.vm.provision "shell", path: "bootstrapVM1.sh"
+   clienteVM1.vm.hostname = "clienteVM1"
+ end
+end
